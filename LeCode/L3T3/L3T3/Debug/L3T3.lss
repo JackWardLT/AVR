@@ -1,0 +1,209 @@
+
+L3T3.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000010e  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000162  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000162  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000194  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000030  00000000  00000000  000001d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000675  00000000  00000000  00000200  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005e2  00000000  00000000  00000875  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000002af  00000000  00000000  00000e57  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000054  00000000  00000000  00001108  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000352  00000000  00000000  0000115c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000e5  00000000  00000000  000014ae  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000020  00000000  00000000  00001593  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 67 00 	call	0xce	; 0xce <main>
+  64:	0c 94 85 00 	jmp	0x10a	; 0x10a <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <debounce>:
+
+#define LED1 PB0 // First LED pin
+#define LED2 PB1 // Second LED pin
+#define BUTTON_PIN PB2 // Button pin
+
+uint8_t debounce(uint8_t pinName, uint8_t pinNumber) {
+  6c:	cf 93       	push	r28
+  6e:	df 93       	push	r29
+  70:	1f 92       	push	r1
+  72:	cd b7       	in	r28, 0x3d	; 61
+  74:	de b7       	in	r29, 0x3e	; 62
+  76:	89 83       	std	Y+1, r24	; 0x01
+	if (bit_is_clear(pinName, pinNumber)) {
+  78:	89 81       	ldd	r24, Y+1	; 0x01
+  7a:	90 e0       	ldi	r25, 0x00	; 0
+  7c:	06 2e       	mov	r0, r22
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <debounce+0x18>
+  80:	95 95       	asr	r25
+  82:	87 95       	ror	r24
+  84:	0a 94       	dec	r0
+  86:	e2 f7       	brpl	.-8      	; 0x80 <debounce+0x14>
+  88:	80 fd       	sbrc	r24, 0
+  8a:	11 c0       	rjmp	.+34     	; 0xae <debounce+0x42>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  8c:	83 ed       	ldi	r24, 0xD3	; 211
+  8e:	90 e3       	ldi	r25, 0x30	; 48
+  90:	01 97       	sbiw	r24, 0x01	; 1
+  92:	f1 f7       	brne	.-4      	; 0x90 <debounce+0x24>
+  94:	00 c0       	rjmp	.+0      	; 0x96 <debounce+0x2a>
+  96:	00 00       	nop
+		_delay_ms(50); // 5 ms delay for debouncing
+		if (bit_is_clear(pinName, pinNumber)) {
+  98:	89 81       	ldd	r24, Y+1	; 0x01
+  9a:	90 e0       	ldi	r25, 0x00	; 0
+  9c:	02 c0       	rjmp	.+4      	; 0xa2 <debounce+0x36>
+  9e:	95 95       	asr	r25
+  a0:	87 95       	ror	r24
+  a2:	6a 95       	dec	r22
+  a4:	e2 f7       	brpl	.-8      	; 0x9e <debounce+0x32>
+  a6:	80 fd       	sbrc	r24, 0
+  a8:	04 c0       	rjmp	.+8      	; 0xb2 <debounce+0x46>
+			return 1; // Confirmed button press
+  aa:	81 e0       	ldi	r24, 0x01	; 1
+  ac:	03 c0       	rjmp	.+6      	; 0xb4 <debounce+0x48>
+		}
+	}
+	return 0; // No button press detected or debouncing not passed
+  ae:	80 e0       	ldi	r24, 0x00	; 0
+  b0:	01 c0       	rjmp	.+2      	; 0xb4 <debounce+0x48>
+  b2:	80 e0       	ldi	r24, 0x00	; 0
+}
+  b4:	0f 90       	pop	r0
+  b6:	df 91       	pop	r29
+  b8:	cf 91       	pop	r28
+  ba:	08 95       	ret
+
+000000bc <toggleLEDs>:
+
+void toggleLEDs() {
+	PORTB ^= (1 << LED1); // Toggle LED1
+  bc:	98 b3       	in	r25, 0x18	; 24
+  be:	81 e0       	ldi	r24, 0x01	; 1
+  c0:	89 27       	eor	r24, r25
+  c2:	88 bb       	out	0x18, r24	; 24
+	PORTB ^= (1 << LED2); // Toggle LED2
+  c4:	98 b3       	in	r25, 0x18	; 24
+  c6:	82 e0       	ldi	r24, 0x02	; 2
+  c8:	89 27       	eor	r24, r25
+  ca:	88 bb       	out	0x18, r24	; 24
+  cc:	08 95       	ret
+
+000000ce <main>:
+}
+
+int main(void) {
+	// Set LED pins as outputs
+	DDRB |= (1 << LED1) | (1 << LED2);
+  ce:	87 b3       	in	r24, 0x17	; 23
+  d0:	83 60       	ori	r24, 0x03	; 3
+  d2:	87 bb       	out	0x17, r24	; 23
+	// Set button pin as input with pull-up enabled
+	DDRB &= ~(1 << BUTTON_PIN);
+  d4:	87 b3       	in	r24, 0x17	; 23
+  d6:	8b 7f       	andi	r24, 0xFB	; 251
+  d8:	87 bb       	out	0x17, r24	; 23
+	PORTB |= (1 << BUTTON_PIN);
+  da:	88 b3       	in	r24, 0x18	; 24
+  dc:	84 60       	ori	r24, 0x04	; 4
+  de:	88 bb       	out	0x18, r24	; 24
+
+	// Ensure LED1 is initially on and LED2 is off
+	PORTB |= (1 << LED1);
+  e0:	88 b3       	in	r24, 0x18	; 24
+  e2:	81 60       	ori	r24, 0x01	; 1
+  e4:	88 bb       	out	0x18, r24	; 24
+	PORTB &= ~(1 << LED2);
+  e6:	88 b3       	in	r24, 0x18	; 24
+  e8:	8d 7f       	andi	r24, 0xFD	; 253
+  ea:	88 bb       	out	0x18, r24	; 24
+
+	uint8_t buttonPressedInstructions = 0;
+  ec:	c0 e0       	ldi	r28, 0x00	; 0
+  ee:	01 c0       	rjmp	.+2      	; 0xf2 <main+0x24>
+			if (buttonPressedInstructions == 0) {
+				toggleLEDs();
+				buttonPressedInstructions = 1; // Mark that the button instruction has been executed
+			}
+			} else {
+			buttonPressedInstructions = 0; // Reset the instruction flag
+  f0:	c0 e0       	ldi	r28, 0x00	; 0
+
+	uint8_t buttonPressedInstructions = 0;
+
+	while (1) {
+		// Use the debounce function to check for button press
+		if (debounce(PINB, BUTTON_PIN)) {
+  f2:	86 b3       	in	r24, 0x16	; 22
+  f4:	62 e0       	ldi	r22, 0x02	; 2
+  f6:	0e 94 36 00 	call	0x6c	; 0x6c <debounce>
+  fa:	88 23       	and	r24, r24
+  fc:	c9 f3       	breq	.-14     	; 0xf0 <main+0x22>
+			if (buttonPressedInstructions == 0) {
+  fe:	c1 11       	cpse	r28, r1
+ 100:	f8 cf       	rjmp	.-16     	; 0xf2 <main+0x24>
+				toggleLEDs();
+ 102:	0e 94 5e 00 	call	0xbc	; 0xbc <toggleLEDs>
+				buttonPressedInstructions = 1; // Mark that the button instruction has been executed
+ 106:	c1 e0       	ldi	r28, 0x01	; 1
+ 108:	f4 cf       	rjmp	.-24     	; 0xf2 <main+0x24>
+
+0000010a <_exit>:
+ 10a:	f8 94       	cli
+
+0000010c <__stop_program>:
+ 10c:	ff cf       	rjmp	.-2      	; 0x10c <__stop_program>

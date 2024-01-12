@@ -1,0 +1,195 @@
+
+Test Code.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000d4  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000128  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000128  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000158  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  00000194  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000657  00000000  00000000  000001bc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005ae  00000000  00000000  00000813  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000002a5  00000000  00000000  00000dc1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000034  00000000  00000000  00001068  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000351  00000000  00000000  0000109c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000109  00000000  00000000  000013ed  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000018  00000000  00000000  000014f6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 44 00 	call	0x88	; 0x88 <main>
+  64:	0c 94 68 00 	jmp	0xd0	; 0xd0 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <variable_delay_ms>:
+#define F_CPU 16000000UL // Define the CPU clock speed (16MHz in this example)
+// Remember to replace 16000000UL with the actual clock speed of your AVR
+
+// Custom delay function to handle variable delays
+void variable_delay_ms(uint16_t milliseconds) {
+	while(milliseconds--) {
+  6c:	07 c0       	rjmp	.+14     	; 0x7c <variable_delay_ms+0x10>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  6e:	89 ef       	ldi	r24, 0xF9	; 249
+  70:	90 e0       	ldi	r25, 0x00	; 0
+  72:	01 97       	sbiw	r24, 0x01	; 1
+  74:	f1 f7       	brne	.-4      	; 0x72 <variable_delay_ms+0x6>
+  76:	00 c0       	rjmp	.+0      	; 0x78 <variable_delay_ms+0xc>
+  78:	00 00       	nop
+  7a:	c9 01       	movw	r24, r18
+  7c:	9c 01       	movw	r18, r24
+  7e:	21 50       	subi	r18, 0x01	; 1
+  80:	31 09       	sbc	r19, r1
+  82:	89 2b       	or	r24, r25
+  84:	a1 f7       	brne	.-24     	; 0x6e <variable_delay_ms+0x2>
+		_delay_ms(1); // delay for 1 ms
+	}
+}
+  86:	08 95       	ret
+
+00000088 <main>:
+	// Variables
+	uint8_t buttonPressedCounter = 0;
+	uint16_t delaySpeed = 1000; // milliseconds
+
+	// Initialize the I/O for the LED and button
+	DDRB |= (1 << PB0); // Set PB0 as output for the LED
+  88:	87 b3       	in	r24, 0x17	; 23
+  8a:	81 60       	ori	r24, 0x01	; 1
+  8c:	87 bb       	out	0x17, r24	; 23
+	DDRB &= ~(1 << PB1); // Set PB1 as input for the button
+  8e:	87 b3       	in	r24, 0x17	; 23
+  90:	8d 7f       	andi	r24, 0xFD	; 253
+  92:	87 bb       	out	0x17, r24	; 23
+	PORTB |= (1 << PB1); // Enable pull-up resistor on PB1
+  94:	88 b3       	in	r24, 0x18	; 24
+  96:	82 60       	ori	r24, 0x02	; 2
+  98:	88 bb       	out	0x18, r24	; 24
+}
+
+int main(void) {
+	// Variables
+	uint8_t buttonPressedCounter = 0;
+	uint16_t delaySpeed = 1000; // milliseconds
+  9a:	c8 ee       	ldi	r28, 0xE8	; 232
+  9c:	d3 e0       	ldi	r29, 0x03	; 3
+	}
+}
+
+int main(void) {
+	// Variables
+	uint8_t buttonPressedCounter = 0;
+  9e:	10 e0       	ldi	r17, 0x00	; 0
+	DDRB &= ~(1 << PB1); // Set PB1 as input for the button
+	PORTB |= (1 << PB1); // Enable pull-up resistor on PB1
+
+	// Main loop
+	while (1) {
+		PORTB ^= (1 << PB0); // Toggle the LED on PB0
+  a0:	98 b3       	in	r25, 0x18	; 24
+  a2:	81 e0       	ldi	r24, 0x01	; 1
+  a4:	89 27       	eor	r24, r25
+  a6:	88 bb       	out	0x18, r24	; 24
+
+		// Check if button on PB1 is pressed (assuming active low)
+		if (!(PINB & (1 << PB1))) {
+  a8:	b1 99       	sbic	0x16, 1	; 22
+  aa:	09 c0       	rjmp	.+18     	; 0xbe <main+0x36>
+			if (buttonPressedCounter == 0) { // If button pressed instructions have NOT been executed
+  ac:	11 11       	cpse	r17, r1
+  ae:	0c c0       	rjmp	.+24     	; 0xc8 <main+0x40>
+				if (delaySpeed == 1000) { // If the speed of blinking is slow
+  b0:	c8 3e       	cpi	r28, 0xE8	; 232
+  b2:	d3 40       	sbci	r29, 0x03	; 3
+  b4:	31 f4       	brne	.+12     	; 0xc2 <main+0x3a>
+					delaySpeed = 100; // Change the delay speed value to fast blinking
+  b6:	c4 e6       	ldi	r28, 0x64	; 100
+  b8:	d0 e0       	ldi	r29, 0x00	; 0
+					} else {
+					delaySpeed = 1000; // Change the delay speed value to slow blinking
+				}
+				buttonPressedCounter = 1; // Button pressed instructions have been executed (once)
+  ba:	11 e0       	ldi	r17, 0x01	; 1
+  bc:	05 c0       	rjmp	.+10     	; 0xc8 <main+0x40>
+			}
+			} else {
+			buttonPressedCounter = 0; // Button pressed instructions have NOT been executed
+  be:	10 e0       	ldi	r17, 0x00	; 0
+  c0:	03 c0       	rjmp	.+6      	; 0xc8 <main+0x40>
+		if (!(PINB & (1 << PB1))) {
+			if (buttonPressedCounter == 0) { // If button pressed instructions have NOT been executed
+				if (delaySpeed == 1000) { // If the speed of blinking is slow
+					delaySpeed = 100; // Change the delay speed value to fast blinking
+					} else {
+					delaySpeed = 1000; // Change the delay speed value to slow blinking
+  c2:	c8 ee       	ldi	r28, 0xE8	; 232
+  c4:	d3 e0       	ldi	r29, 0x03	; 3
+				}
+				buttonPressedCounter = 1; // Button pressed instructions have been executed (once)
+  c6:	11 e0       	ldi	r17, 0x01	; 1
+			}
+			} else {
+			buttonPressedCounter = 0; // Button pressed instructions have NOT been executed
+		}
+
+		variable_delay_ms(delaySpeed); // Wait for the specified delay
+  c8:	ce 01       	movw	r24, r28
+  ca:	0e 94 36 00 	call	0x6c	; 0x6c <variable_delay_ms>
+	}
+  ce:	e8 cf       	rjmp	.-48     	; 0xa0 <main+0x18>
+
+000000d0 <_exit>:
+  d0:	f8 94       	cli
+
+000000d2 <__stop_program>:
+  d2:	ff cf       	rjmp	.-2      	; 0xd2 <__stop_program>
